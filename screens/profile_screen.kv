@@ -1,0 +1,184 @@
+#:kivy 2.0.0
+
+<ProfileScreen>:
+    BoxLayout:
+        orientation: 'vertical'
+        padding: dp(16)
+        spacing: dp(16)
+        
+        # Profil başlığı
+        BoxLayout:
+            size_hint_y: None
+            height: dp(50)
+            
+            Label:
+                text: 'Profil'
+                font_size: sp(24)
+                bold: True
+                color: 0, 0, 0, 1
+                halign: 'left'
+                valign: 'middle'
+        
+        ScrollView:
+            BoxLayout:
+                orientation: 'vertical'
+                spacing: dp(16)
+                size_hint_y: None
+                height: self.minimum_height
+                
+                # Profil fotoğrafı ve isim
+                BoxLayout:
+                    size_hint_y: None
+                    height: dp(120)
+                    padding: [0, dp(10)]
+                    
+                    AsyncImage:
+                        id: profile_image
+                        source: root.profile_image
+                        size_hint: None, None
+                        size: dp(100), dp(100)
+                        border: dp(50)
+                    
+                    BoxLayout:
+                        orientation: 'vertical'
+                        padding: [dp(16), 0]
+                        
+                        Label:
+                            text: root.username
+                            font_size: sp(20)
+                            bold: True
+                            color: 0, 0, 0, 1
+                            text_size: self.size
+                            halign: 'left'
+                            valign: 'middle'
+                        
+                        Label:
+                            text: root.bio
+                            color: 0.4, 0.4, 0.4, 1
+                            text_size: self.size
+                            halign: 'left'
+                            valign: 'top'
+                
+                # Sosyal medya linkleri
+                BoxLayout:
+                    orientation: 'vertical'
+                    size_hint_y: None
+                    height: self.minimum_height
+                    spacing: dp(8)
+                    padding: [0, dp(16)]
+                    
+                    Label:
+                        text: 'Sosyal Medya Hesapları'
+                        font_size: sp(18)
+                        bold: True
+                        size_hint_y: None
+                        height: dp(30)
+                        color: 0, 0, 0, 1
+                        halign: 'left'
+                    
+                    # Instagram
+                    BoxLayout:
+                        size_hint_y: None
+                        height: dp(50)
+                        spacing: dp(8)
+                        
+                        Image:
+                            source: 'assets/icons/instagram.png'
+                            size_hint: None, None
+                            size: dp(24), dp(24)
+                            pos_hint: {'center_y': 0.5}
+                        
+                        TextInput:
+                            id: instagram_link
+                            hint_text: 'Instagram profil linki'
+                            text: root.instagram_link
+                            multiline: False
+                            on_text: root.update_social_link('instagram', self.text)
+                    
+                    # Twitter
+                    BoxLayout:
+                        size_hint_y: None
+                        height: dp(50)
+                        spacing: dp(8)
+                        
+                        Image:
+                            source: 'assets/icons/twitter.png'
+                            size_hint: None, None
+                            size: dp(24), dp(24)
+                            pos_hint: {'center_y': 0.5}
+                        
+                        TextInput:
+                            id: twitter_link
+                            hint_text: 'Twitter profil linki'
+                            text: root.twitter_link
+                            multiline: False
+                            on_text: root.update_social_link('twitter', self.text)
+                    
+                    # YouTube
+                    BoxLayout:
+                        size_hint_y: None
+                        height: dp(50)
+                        spacing: dp(8)
+                        
+                        Image:
+                            source: 'assets/icons/youtube.png'
+                            size_hint: None, None
+                            size: dp(24), dp(24)
+                            pos_hint: {'center_y': 0.5}
+                        
+                        TextInput:
+                            id: youtube_link
+                            hint_text: 'YouTube kanal linki'
+                            text: root.youtube_link
+                            multiline: False
+                            on_text: root.update_social_link('youtube', self.text)
+                    
+                    # TikTok
+                    BoxLayout:
+                        size_hint_y: None
+                        height: dp(50)
+                        spacing: dp(8)
+                        
+                        Image:
+                            source: 'assets/icons/tiktok.png'
+                            size_hint: None, None
+                            size: dp(24), dp(24)
+                            pos_hint: {'center_y': 0.5}
+                        
+                        TextInput:
+                            id: tiktok_link
+                            hint_text: 'TikTok profil linki'
+                            text: root.tiktok_link
+                            multiline: False
+                            on_text: root.update_social_link('tiktok', self.text)
+                    
+                    # Blog
+                    BoxLayout:
+                        size_hint_y: None
+                        height: dp(50)
+                        spacing: dp(8)
+                        
+                        Image:
+                            source: 'assets/icons/blog.png'
+                            size_hint: None, None
+                            size: dp(24), dp(24)
+                            pos_hint: {'center_y': 0.5}
+                        
+                        TextInput:
+                            id: blog_link
+                            hint_text: 'Blog/Website linki'
+                            text: root.blog_link
+                            multiline: False
+                            on_text: root.update_social_link('blog', self.text)
+                
+                Widget:
+                    size_hint_y: None
+                    height: dp(20)
+                
+                # Kaydet butonu
+                Button:
+                    text: 'Değişiklikleri Kaydet'
+                    size_hint_y: None
+                    height: dp(50)
+                    background_color: 0.2, 0.6, 1, 1
+                    on_release: root.save_changes()

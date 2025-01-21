@@ -1,0 +1,129 @@
+#:kivy 2.0.0
+
+<ContentCutterScreen>:
+    BoxLayout:
+        orientation: 'vertical'
+        padding: dp(16)
+        spacing: dp(16)
+        
+        # Başlık ve geri butonu
+        BoxLayout:
+            size_hint_y: None
+            height: dp(50)
+            spacing: dp(16)
+            
+            Button:
+                text: 'Geri'
+                size_hint_x: None
+                width: dp(100)
+                on_release: root.go_back()
+            
+            Label:
+                text: 'İçerik Kesme'
+                font_size: sp(24)
+                bold: True
+                color: 0, 0, 0, 1
+                text_size: self.width, None
+                halign: 'left'
+        
+        # İçerik önizleme
+        BoxLayout:
+            id: preview_container
+            size_hint_y: 0.4
+        
+        # Kesme araçları (içerik türüne göre değişir)
+        BoxLayout:
+            id: cutter_tools
+            orientation: 'vertical'
+            size_hint_y: 0.4
+            padding: dp(16)
+            spacing: dp(16)
+            
+            # Video/Ses kesici
+            BoxLayout:
+                id: media_cutter
+                orientation: 'vertical'
+                opacity: 1 if root.content_type in ['video', 'audio'] else 0
+                disabled: root.content_type not in ['video', 'audio']
+                
+                # Zaman çubuğu
+                Slider:
+                    id: time_slider
+                    min: 0
+                    max: root.media_duration
+                    value: root.current_time
+                    on_value: root.seek_media(self.value)
+                
+                # Başlangıç ve bitiş zamanı
+                BoxLayout:
+                    spacing: dp(16)
+                    size_hint_y: None
+                    height: dp(40)
+                    
+                    Button:
+                        text: 'Başlangıç'
+                        on_release: root.set_start_time()
+                    
+                    Label:
+                        text: root.format_time(root.start_time)
+                    
+                    Button:
+                        text: 'Bitiş'
+                        on_release: root.set_end_time()
+                    
+                    Label:
+                        text: root.format_time(root.end_time)
+            
+            # Metin seçici
+            BoxLayout:
+                id: text_cutter
+                orientation: 'vertical'
+                opacity: 1 if root.content_type == 'text' else 0
+                disabled: root.content_type != 'text'
+                
+                ScrollView:
+                    TextInput:
+                        id: text_content
+                        text: root.text_content
+                        readonly: True
+                        selection_color: (0.2, 0.6, 1, 0.4)
+                        on_selection: root.update_text_selection()
+                
+                Label:
+                    size_hint_y: None
+                    height: dp(30)
+                    text: f'Seçilen metin ({len(root.selected_text)} karakter)'
+            
+            # Görsel kırpıcı
+            BoxLayout:
+                id: image_cutter
+                orientation: 'vertical'
+                opacity: 1 if root.content_type == 'image' else 0
+                disabled: root.content_type != 'image'
+                
+                # Kırpma aracı burada olacak
+                Widget:
+                    id: crop_tool
+                    # Özel kırpma widget'ı eklenecek
+        
+        # Alt butonlar
+        BoxLayout:
+            size_hint_y: None
+            height: dp(50)
+            spacing: dp(16)
+            
+            Widget:
+                # Boşluk
+            
+            Button:
+                text: 'Önizle'
+                size_hint_x: None
+                width: dp(120)
+                on_release: root.preview_cut()
+            
+            Button:
+                text: 'Kaydet'
+                size_hint_x: None
+                width: dp(120)
+                background_color: 0.2, 0.6, 1, 1
+                on_release: root.save_cut()

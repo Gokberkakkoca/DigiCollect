@@ -1,0 +1,135 @@
+#:kivy 2.0.0
+
+<BlogCutterScreen>:
+    BoxLayout:
+        orientation: 'vertical'
+        padding: dp(16)
+        spacing: dp(16)
+        
+        # Başlık
+        Label:
+            text: 'Blog Yazısı Kes'
+            size_hint_y: None
+            height: dp(40)
+            font_size: sp(24)
+            bold: True
+        
+        # Blog bilgileri
+        BoxLayout:
+            size_hint_y: None
+            height: dp(80)
+            orientation: 'vertical'
+            spacing: dp(4)
+            
+            Label:
+                id: blog_title
+                size_hint_y: None
+                height: dp(30)
+                font_size: sp(18)
+                bold: True
+                text_size: self.width, None
+                halign: 'left'
+            
+            Label:
+                id: blog_author
+                size_hint_y: None
+                height: dp(25)
+                font_size: sp(16)
+                color: 0.5, 0.5, 0.5, 1
+                text_size: self.width, None
+                halign: 'left'
+            
+            Label:
+                id: reading_time
+                size_hint_y: None
+                height: dp(25)
+                font_size: sp(16)
+                color: 0.5, 0.5, 0.5, 1
+                text_size: self.width, None
+                halign: 'left'
+        
+        # İçerik seçici
+        BoxLayout:
+            orientation: 'vertical'
+            
+            Label:
+                text: 'Kaydetmek istediğiniz bölümü seçin:'
+                size_hint_y: None
+                height: dp(30)
+                text_size: self.width, None
+                halign: 'left'
+            
+            ScrollView:
+                TextInput:
+                    id: content_input
+                    text: root.content
+                    disabled: True
+                    readonly: True
+                    size_hint_y: None
+                    height: max(self.minimum_height, 200)
+                    background_color: 1, 1, 1, 0.9
+                    foreground_color: 0, 0, 0, 1
+                    on_selection: root.on_text_selection(*args)
+        
+        # Seçim önizleme
+        BoxLayout:
+            size_hint_y: None
+            height: dp(100)
+            orientation: 'vertical'
+            
+            Label:
+                text: 'Seçilen Bölüm:'
+                size_hint_y: None
+                height: dp(30)
+                text_size: self.width, None
+                halign: 'left'
+            
+            ScrollView:
+                Label:
+                    id: preview_label
+                    text: ''
+                    size_hint_y: None
+                    height: self.texture_size[1]
+                    text_size: self.width, None
+                    color: 0.2, 0.2, 0.2, 1
+        
+        # Koleksiyon seçici
+        BoxLayout:
+            size_hint_y: None
+            height: dp(50)
+            spacing: dp(8)
+            
+            Label:
+                text: 'Koleksiyon:'
+                size_hint_x: None
+                width: dp(100)
+            
+            Spinner:
+                id: collection_spinner
+                text: 'Koleksiyon Seç'
+                values: root.get_collections()
+        
+        # Kaydet butonu
+        Button:
+            id: save_button
+            text: 'Seçili Bölümü Koleksiyona Ekle'
+            size_hint_y: None
+            height: dp(50)
+            disabled: True
+            on_release: root.save_selection()
+        
+        # Yükleniyor göstergesi
+        MDSpinner:
+            id: loading_indicator
+            size_hint: None, None
+            size: dp(46), dp(46)
+            pos_hint: {'center_x': .5}
+            active: False
+        
+        # Hata mesajı
+        Label:
+            id: error_label
+            size_hint_y: None
+            height: dp(30)
+            color: 1, 0, 0, 1
+            opacity: 0

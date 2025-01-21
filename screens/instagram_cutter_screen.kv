@@ -1,0 +1,177 @@
+#:kivy 2.0.0
+
+<MediaPreview>:
+    orientation: 'vertical'
+    size_hint_y: None
+    height: dp(250)
+    padding: dp(8)
+    spacing: dp(8)
+    canvas.before:
+        Color:
+            rgba: (0.95, 0.95, 0.95, 1) if self.is_selected else (1, 1, 1, 1)
+        Rectangle:
+            pos: self.pos
+            size: self.size
+    
+    # Medya önizleme
+    AsyncImage:
+        source: root.media_url
+        allow_stretch: True
+        keep_ratio: True
+    
+    # Video göstergesi (eğer medya video ise)
+    Label:
+        text: '▶️ Video'
+        size_hint_y: None
+        height: dp(30)
+        opacity: 1 if root.media_type == 'video' else 0
+    
+    # Seçim butonu
+    Button:
+        text: 'Seç' if not root.is_selected else 'Seçimi Kaldır'
+        size_hint_y: None
+        height: dp(40)
+        background_color: (0.2, 0.6, 1, 1) if root.is_selected else (0.9, 0.9, 0.9, 1)
+        on_release: 
+            root.toggle_selection()
+            app.root.get_screen('instagram_cutter').on_media_selection(root)
+
+<InstagramCutterScreen>:
+    BoxLayout:
+        orientation: 'vertical'
+        padding: dp(16)
+        spacing: dp(16)
+        
+        # Başlık
+        Label:
+            text: 'Instagram Gönderisi Kes'
+            size_hint_y: None
+            height: dp(40)
+            font_size: sp(24)
+            bold: True
+        
+        # Gönderi başlığı
+        BoxLayout:
+            size_hint_y: None
+            height: dp(60)
+            spacing: dp(8)
+            
+            # Profil resmi
+            AsyncImage:
+                id: profile_image
+                size_hint: None, None
+                size: dp(50), dp(50)
+                border_radius: dp(25)
+            
+            # Kullanıcı bilgileri
+            BoxLayout:
+                orientation: 'vertical'
+                padding: 0, dp(4)
+                
+                Label:
+                    id: full_name
+                    text: ''
+                    color: 0, 0, 0, 1
+                    text_size: self.width, None
+                    size_hint_y: None
+                    height: self.texture_size[1]
+                    halign: 'left'
+                    bold: True
+                
+                Label:
+                    id: username
+                    text: ''
+                    color: 0.5, 0.5, 0.5, 1
+                    text_size: self.width, None
+                    size_hint_y: None
+                    height: self.texture_size[1]
+                    halign: 'left'
+        
+        # Gönderi bilgileri
+        BoxLayout:
+            size_hint_y: None
+            height: dp(80)
+            orientation: 'vertical'
+            spacing: dp(4)
+            
+            Label:
+                id: location
+                text: ''
+                color: 0.5, 0.5, 0.5, 1
+                text_size: self.width, None
+                size_hint_y: None
+                height: self.texture_size[1]
+                halign: 'left'
+            
+            Label:
+                id: stats_label
+                text: ''
+                color: 0.5, 0.5, 0.5, 1
+                text_size: self.width, None
+                size_hint_y: None
+                height: self.texture_size[1]
+                halign: 'left'
+            
+            ScrollView:
+                size_hint_y: None
+                height: dp(40)
+                
+                Label:
+                    id: caption
+                    text: ''
+                    color: 0, 0, 0, 1
+                    text_size: self.width, None
+                    size_hint_y: None
+                    height: self.texture_size[1]
+                    halign: 'left'
+        
+        # Medya önizlemeleri
+        ScrollView:
+            GridLayout:
+                id: media_container
+                cols: 2
+                spacing: dp(8)
+                size_hint_y: None
+                height: self.minimum_height
+                padding: dp(8)
+        
+        # Koleksiyon seçici
+        BoxLayout:
+            size_hint_y: None
+            height: dp(50)
+            spacing: dp(8)
+            
+            Label:
+                text: 'Koleksiyon:'
+                size_hint_x: None
+                width: dp(100)
+            
+            Spinner:
+                id: collection_spinner
+                text: 'Koleksiyon Seç'
+                values: root.get_collections()
+        
+        # Kaydet butonu
+        Button:
+            id: save_button
+            text: 'Seçili Medyaları Koleksiyona Ekle'
+            size_hint_y: None
+            height: dp(50)
+            disabled: True
+            on_release: root.save_selection()
+        
+        # Yükleniyor göstergesi
+        MDSpinner:
+            id: loading_indicator
+            size_hint: None, None
+            size: dp(46), dp(46)
+            pos_hint: {'center_x': .5}
+            active: False
+        
+        # Hata mesajı
+        Label:
+            id: error_label
+            size_hint_y: None
+            height: dp(30)
+            color: 1, 0, 0, 1
+            opacity: 0

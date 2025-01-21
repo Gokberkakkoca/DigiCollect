@@ -1,0 +1,390 @@
+#:kivy 2.0.0
+
+<CollectionCard>:
+    orientation: 'vertical'
+    padding: dp(16)
+    spacing: dp(8)
+    size_hint_y: None
+    height: dp(280)  
+    canvas.before:
+        Color:
+            rgba: 0.95, 0.95, 0.95, 1
+        RoundedRectangle:
+            pos: self.pos
+            size: self.size
+            radius: [dp(10)]
+    
+    # Kapak resmi
+    AsyncImage:
+        source: root.cover_image if root.cover_image else 'assets/default_cover.png'
+        size_hint_y: 0.4
+        allow_stretch: True
+        keep_ratio: True
+    
+    # Koleksiyon bilgileri
+    BoxLayout:
+        orientation: 'vertical'
+        spacing: dp(4)
+        size_hint_y: 0.4
+        
+        Label:
+            text: root.name
+            font_size: sp(18)
+            bold: True
+            color: 0, 0, 0, 1
+            text_size: self.width, None
+            size_hint_y: None
+            height: self.texture_size[1]
+            halign: 'left'
+        
+        Label:
+            text: root.description
+            color: 0.5, 0.5, 0.5, 1
+            text_size: self.width, None
+            size_hint_y: None
+            height: self.texture_size[1]
+            halign: 'left'
+        
+        BoxLayout:
+            size_hint_y: None
+            height: dp(30)
+            spacing: dp(8)
+            
+            Label:
+                text: f"{root.item_count} öğe"
+                color: 0.5, 0.5, 0.5, 1
+                size_hint_x: None
+                width: dp(80)
+            
+            Label:
+                text: root.created_at
+                color: 0.5, 0.5, 0.5, 1
+                size_hint_x: None
+                width: dp(100)
+            
+            Label:
+                text: f"{root.follower_count} takipçi"
+                color: 0.5, 0.5, 0.5, 1
+                size_hint_x: None
+                width: dp(100)
+    
+    # Görünürlük bilgisi
+    BoxLayout:
+        size_hint_y: None
+        height: dp(30)
+        spacing: dp(8)
+        padding: [0, dp(4)]
+        
+        MDIcon:
+            icon: 'lock' if root.visibility == 'private' else 'earth' if root.visibility == 'public' else 'link'
+            size_hint_x: None
+            width: dp(24)
+            theme_text_color: "Custom"
+            text_color: 0.5, 0.5, 0.5, 1
+        
+        Label:
+            text: 'Özel' if root.visibility == 'private' else 'Herkese Açık' if root.visibility == 'public' else 'Bağlantı ile'
+            color: 0.5, 0.5, 0.5, 1
+            text_size: self.width, None
+            size_hint_y: None
+            height: self.texture_size[1]
+            halign: 'left'
+    
+    # Butonlar
+    BoxLayout:
+        size_hint_y: None
+        height: dp(40)
+        spacing: dp(8)
+        
+        # Görüntüle butonu
+        Button:
+            text: 'Görüntüle'
+            on_release: app.root.get_screen('collection_manager').show_collection(root.collection_id)
+        
+        # Takip et/Takibi bırak butonu (sadece başkasının koleksiyonları için)
+        Button:
+            text: 'Takibi Bırak' if root.is_following else 'Takip Et'
+            background_color: (0.2, 0.6, 1, 1) if root.is_following else (0.3, 0.7, 0.3, 1)
+            opacity: 1 if not root.is_owner and root.visibility != 'private' else 0
+            disabled: root.is_owner or root.visibility == 'private'
+            on_release: root.toggle_follow()
+        
+        # Paylaş butonu
+        Button:
+            text: 'Paylaş'
+            background_color: 0.3, 0.7, 0.3, 1
+            opacity: 1 if root.visibility != 'private' else 0
+            disabled: root.visibility == 'private'
+            on_release: root.share_collection()
+        
+        # Görünürlük ayarları butonu (sadece sahip için)
+        Button:
+            text: 'Görünürlük'
+            background_color: 0.7, 0.7, 0.7, 1
+            opacity: 1 if root.is_owner else 0
+            disabled: not root.is_owner
+            on_release: root.show_visibility_dialog()
+        
+        # Sil butonu (sadece sahip için)
+        Button:
+            text: 'Sil'
+            background_color: 1, 0.3, 0.3, 1
+            opacity: 1 if root.is_owner else 0
+            disabled: not root.is_owner
+            on_release: app.root.get_screen('collection_manager').delete_collection(root.collection_id)
+
+<ItemCard>:
+    orientation: 'horizontal'
+    padding: dp(8)
+    spacing: dp(8)
+    size_hint_y: None
+    height: dp(100)
+    canvas.before:
+        Color:
+            rgba: 0.95, 0.95, 0.95, 1
+        RoundedRectangle:
+            pos: self.pos
+            size: self.size
+            radius: [dp(5)]
+    
+    # Küçük resim
+    AsyncImage:
+        source: root.thumbnail if root.thumbnail else 'assets/default_thumbnail.png'
+        size_hint_x: None
+        width: dp(80)
+        allow_stretch: True
+        keep_ratio: True
+    
+    # İçerik bilgileri
+    BoxLayout:
+        orientation: 'vertical'
+        spacing: dp(4)
+        
+        Label:
+            text: root.title
+            font_size: sp(16)
+            bold: True
+            color: 0, 0, 0, 1
+            text_size: self.width, None
+            size_hint_y: None
+            height: self.texture_size[1]
+            halign: 'left'
+        
+        Label:
+            text: root.description
+            color: 0.5, 0.5, 0.5, 1
+            text_size: self.width, None
+            size_hint_y: None
+            height: self.texture_size[1]
+            halign: 'left'
+        
+        BoxLayout:
+            size_hint_y: None
+            height: dp(30)
+            spacing: dp(8)
+            
+            Label:
+                text: root.content_type
+                color: 0.5, 0.5, 0.5, 1
+                size_hint_x: None
+                width: dp(80)
+            
+            Label:
+                text: root.created_at
+                color: 0.5, 0.5, 0.5, 1
+                size_hint_x: None
+                width: dp(100)
+    
+    # Kaldır butonu
+    Button:
+        text: 'Kaldır'
+        size_hint_x: None
+        width: dp(60)
+        background_color: 1, 0.3, 0.3, 1
+        on_release: app.root.get_screen('collection_manager').remove_item(root.item_id)
+
+<CreateCollectionPopup>:
+    title: 'Yeni Koleksiyon'
+    BoxLayout:
+        orientation: 'vertical'
+        padding: dp(16)
+        spacing: dp(16)
+        
+        BoxLayout:
+            orientation: 'vertical'
+            spacing: dp(4)
+            size_hint_y: None
+            height: dp(80)
+            
+            Label:
+                text: 'Koleksiyon Adı'
+                color: 0, 0, 0, 1
+                text_size: self.width, None
+                size_hint_y: None
+                height: self.texture_size[1]
+                halign: 'left'
+            
+            TextInput:
+                id: name_input
+                multiline: False
+                size_hint_y: None
+                height: dp(40)
+        
+        BoxLayout:
+            orientation: 'vertical'
+            spacing: dp(4)
+            size_hint_y: None
+            height: dp(120)
+            
+            Label:
+                text: 'Açıklama'
+                color: 0, 0, 0, 1
+                text_size: self.width, None
+                size_hint_y: None
+                height: self.texture_size[1]
+                halign: 'left'
+            
+            TextInput:
+                id: description_input
+                multiline: True
+                size_hint_y: None
+                height: dp(80)
+        
+        Button:
+            text: 'Oluştur'
+            size_hint_y: None
+            height: dp(50)
+            on_release: root.create_collection()
+
+<CollectionManagerScreen>:
+    BoxLayout:
+        orientation: 'vertical'
+        
+        # Üst bar
+        BoxLayout:
+            size_hint_y: None
+            height: dp(60)
+            padding: dp(16)
+            spacing: dp(16)
+            canvas.before:
+                Color:
+                    rgba: 0.95, 0.95, 0.95, 1
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+            
+            # Sekmeler
+            BoxLayout:
+                spacing: dp(16)
+                
+                # Koleksiyonlarım sekmesi
+                ToggleButton:
+                    text: 'Koleksiyonlarım'
+                    group: 'tabs'
+                    state: 'down' if root.current_tab == 'my_collections' else 'normal'
+                    on_release: root.switch_tab('my_collections')
+                    background_color: (0.2, 0.6, 1, 1) if self.state == 'down' else (0.9, 0.9, 0.9, 1)
+                
+                # Keşfet sekmesi
+                ToggleButton:
+                    text: 'Keşfet'
+                    group: 'tabs'
+                    state: 'down' if root.current_tab == 'public' else 'normal'
+                    on_release: root.switch_tab('public')
+                    background_color: (0.2, 0.6, 1, 1) if self.state == 'down' else (0.9, 0.9, 0.9, 1)
+                
+                # Takip edilenler sekmesi
+                ToggleButton:
+                    text: 'Takip Edilenler'
+                    group: 'tabs'
+                    state: 'down' if root.current_tab == 'following' else 'normal'
+                    on_release: root.switch_tab('following')
+                    background_color: (0.2, 0.6, 1, 1) if self.state == 'down' else (0.9, 0.9, 0.9, 1)
+            
+            # Yeni koleksiyon butonu (sadece Koleksiyonlarım sekmesinde)
+            Button:
+                text: 'Yeni Koleksiyon'
+                size_hint_x: None
+                width: dp(150)
+                opacity: 1 if root.current_tab == 'my_collections' else 0
+                disabled: root.current_tab != 'my_collections'
+                background_color: 0.3, 0.7, 0.3, 1
+                on_release: root.show_create_collection_popup()
+        
+        # Ana içerik
+        ScreenManager:
+            id: screen_manager
+            
+            # Koleksiyon listesi ekranı
+            Screen:
+                name: 'collections_list'
+                
+                BoxLayout:
+                    orientation: 'vertical'
+                    padding: dp(16)
+                    spacing: dp(16)
+                    
+                    # Koleksiyon listesi
+                    ScrollView:
+                        GridLayout:
+                            id: collections_container
+                            cols: 2
+                            spacing: dp(16)
+                            size_hint_y: None
+                            height: self.minimum_height
+                            padding: dp(8)
+            
+            # Koleksiyon detay ekranı
+            Screen:
+                name: 'collection_view'
+                
+                BoxLayout:
+                    orientation: 'vertical'
+                    padding: dp(16)
+                    spacing: dp(16)
+                    
+                    # Başlık ve geri butonu
+                    BoxLayout:
+                        size_hint_y: None
+                        height: dp(50)
+                        spacing: dp(16)
+                        
+                        Button:
+                            text: 'Geri'
+                            size_hint_x: None
+                            width: dp(100)
+                            on_release: root.back_to_collections()
+                        
+                        Label:
+                            text: 'Koleksiyon İçeriği'
+                            font_size: sp(24)
+                            bold: True
+                            color: 0, 0, 0, 1
+                            text_size: self.width, None
+                            halign: 'left'
+                    
+                    # Öğe listesi
+                    ScrollView:
+                        GridLayout:
+                            id: items_container
+                            cols: 1
+                            spacing: dp(8)
+                            size_hint_y: None
+                            height: self.minimum_height
+                            padding: dp(8)
+        
+        # Yükleniyor göstergesi
+        MDSpinner:
+            id: loading_indicator
+            size_hint: None, None
+            size: dp(46), dp(46)
+            pos_hint: {'center_x': .5, 'center_y': .5}
+            active: False
+        
+        # Hata mesajı
+        Label:
+            id: error_label
+            size_hint_y: None
+            height: dp(30)
+            color: 1, 0, 0, 1
+            opacity: 0

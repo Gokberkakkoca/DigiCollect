@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.digicollect.app">
+
+    <!-- İnternet izni -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    
+    <!-- Diğer uygulamaların üzerinde gösterme izni -->
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <uses-permission android:name="android.permission.ACTION_MANAGE_OVERLAY_PERMISSION" />
+    
+    <!-- Başlangıçta otomatik başlama izni -->
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+
+    <application
+        android:label="DigiCollect"
+        android:icon="@mipmap/ic_launcher">
+        
+        <!-- Ana aktivite -->
+        <activity
+            android:name="org.kivy.android.PythonActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        
+        <!-- Floating buton servisi -->
+        <service
+            android:name=".FloatingButtonService"
+            android:enabled="true"
+            android:exported="false" />
+        
+        <!-- Boot receiver -->
+        <receiver
+            android:name=".BootReceiver"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </receiver>
+        
+    </application>
+</manifest>

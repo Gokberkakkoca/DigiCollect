@@ -1,0 +1,37 @@
+#:kivy 2.0.0
+
+<FloatingActionButton>:
+    canvas.before:
+        # Gölge efekti
+        Color:
+            rgba: 0, 0, 0, 0.2
+        RoundedRectangle:
+            pos: self.pos[0] + dp(2), self.pos[1] - dp(2)
+            size: self.size
+            radius: [self.height/2]
+        
+        # Ana buton arka planı
+        Color:
+            rgba: self.background_color
+        RoundedRectangle:
+            pos: self.pos
+            size: self.size
+            radius: [self.height/2]
+
+<FloatingActionMenuItem>:
+    canvas.before:
+        Color:
+            rgba: 0.95, 0.95, 0.95, 1
+        RoundedRectangle:
+            pos: self.pos
+            size: self.size
+            radius: [dp(4)]
+    
+    # Hover efekti
+    canvas.after:
+        Color:
+            rgba: 0, 0, 0, 0 if not self.state == 'down' else 0.1
+        RoundedRectangle:
+            pos: self.pos
+            size: self.size
+            radius: [dp(4)]

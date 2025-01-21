@@ -1,0 +1,122 @@
+#:kivy 2.0.0
+
+<VideoCutterScreen>:
+    BoxLayout:
+        orientation: 'vertical'
+        padding: dp(16)
+        spacing: dp(16)
+        
+        # Başlık
+        Label:
+            text: 'Video Kes'
+            size_hint_y: None
+            height: dp(40)
+            font_size: sp(24)
+            bold: True
+        
+        # Video başlığı
+        Label:
+            id: video_title
+            size_hint_y: None
+            height: dp(30)
+            font_size: sp(16)
+        
+        # Video önizleme
+        BoxLayout:
+            size_hint_y: 0.5
+            
+            AsyncImage:
+                id: video_preview
+                source: root.thumbnail_path
+                allow_stretch: True
+                keep_ratio: True
+        
+        # Zaman seçici
+        BoxLayout:
+            size_hint_y: None
+            height: dp(80)
+            orientation: 'vertical'
+            spacing: dp(8)
+            
+            # Süre göstergesi
+            BoxLayout:
+                size_hint_y: None
+                height: dp(20)
+                
+                Label:
+                    id: start_time_label
+                    text: '00:00'
+                    size_hint_x: None
+                    width: dp(50)
+                
+                Label:
+                    id: video_duration_label
+                    text: '00:00'
+                    size_hint_x: None
+                    width: dp(50)
+            
+            # Çift yönlü slider
+            RangeSlider:
+                id: time_slider
+                min: 0
+                max: root.video_duration
+                value: (root.start_time, root.end_time)
+                disabled: True
+                on_value: root.update_time_selection(self.value)
+        
+        # Koleksiyon seçici
+        BoxLayout:
+            size_hint_y: None
+            height: dp(50)
+            spacing: dp(8)
+            
+            Label:
+                text: 'Koleksiyon:'
+                size_hint_x: None
+                width: dp(100)
+            
+            Spinner:
+                id: collection_spinner
+                text: 'Koleksiyon Seç'
+                values: root.get_collections()
+        
+        # Kesme butonu
+        Button:
+            id: cut_button
+            text: 'Videoyu Kes ve Koleksiyona Ekle'
+            size_hint_y: None
+            height: dp(50)
+            disabled: True
+            on_release: root.cut_video()
+        
+        # Yükleniyor göstergesi
+        MDSpinner:
+            id: loading_indicator
+            size_hint: None, None
+            size: dp(46), dp(46)
+            pos_hint: {'center_x': .5}
+            active: False
+        
+        # Hata mesajı
+        Label:
+            id: error_label
+            size_hint_y: None
+            height: dp(30)
+            color: 1, 0, 0, 1
+            opacity: 0
+
+<RangeSlider@Widget>:
+    # Çift yönlü slider için özel widget
+    # (Bu widget'ın implementasyonu ayrı bir dosyada olmalı)
+    canvas:
+        Color:
+            rgba: 0.3, 0.3, 0.3, 1
+        Rectangle:
+            pos: self.pos
+            size: self.size
+        
+        Color:
+            rgba: 0.2, 0.6, 1, 1
+        Rectangle:
+            pos: self.pos[0] + self.value[0] / self.max * self.width, self.pos[1]
+            size: (self.value[1] - self.value[0]) / self.max * self.width, self.height

@@ -1,0 +1,149 @@
+#:kivy 2.0.0
+
+<ContentShareScreen>:
+    BoxLayout:
+        orientation: 'vertical'
+        padding: dp(16)
+        spacing: dp(16)
+        
+        # Başlık
+        Label:
+            text: 'Koleksiyon Paylaşımı'
+            font_size: sp(24)
+            size_hint_y: None
+            height: dp(40)
+            bold: True
+            color: 0, 0, 0, 1
+        
+        # Görünürlük seçenekleri
+        BoxLayout:
+            size_hint_y: None
+            height: dp(60)
+            spacing: dp(16)
+            
+            Label:
+                text: 'Görünürlük:'
+                size_hint_x: None
+                width: dp(100)
+            
+            ToggleButton:
+                text: 'Özel'
+                group: 'visibility'
+                state: 'down' if root.visibility == 'PRIVATE' else 'normal'
+                on_state: if self.state == 'down': root.set_visibility('PRIVATE')
+            
+            ToggleButton:
+                text: 'Herkese Açık'
+                group: 'visibility'
+                state: 'down' if root.visibility == 'PUBLIC' else 'normal'
+                on_state: if self.state == 'down': root.set_visibility('PUBLIC')
+            
+            ToggleButton:
+                text: 'Linkle Paylaş'
+                group: 'visibility'
+                state: 'down' if root.visibility == 'UNLISTED' else 'normal'
+                on_state: if self.state == 'down': root.set_visibility('UNLISTED')
+        
+        # Paylaşım linki (sadece UNLISTED modunda görünür)
+        BoxLayout:
+            size_hint_y: None
+            height: dp(50)
+            spacing: dp(16)
+            opacity: 1 if root.visibility == 'UNLISTED' else 0
+            disabled: root.visibility != 'UNLISTED'
+            
+            TextInput:
+                id: share_link
+                readonly: True
+                text: root.share_link
+            
+            Button:
+                text: 'Kopyala'
+                size_hint_x: None
+                width: dp(100)
+                on_release: root.copy_link()
+        
+        # Davet mesajı
+        BoxLayout:
+            size_hint_y: None
+            height: dp(100)
+            orientation: 'vertical'
+            spacing: dp(8)
+            
+            Label:
+                text: 'Arkadaşlarını DigiCollect\'e davet et:'
+                size_hint_y: None
+                height: dp(30)
+                color: 0.3, 0.3, 0.3, 1
+            
+            TextInput:
+                id: invite_message
+                text: root.get_invite_message()
+                readonly: True
+            
+            Button:
+                text: 'Davet Mesajını Kopyala'
+                size_hint_y: None
+                height: dp(40)
+                on_release: root.copy_invite_message()
+        
+        Widget:
+            # Boşluk
+        
+        # Alt butonlar
+        BoxLayout:
+            size_hint_y: None
+            height: dp(50)
+            spacing: dp(16)
+            
+            Button:
+                text: 'İptal'
+                on_release: root.cancel()
+            
+            Button:
+                text: 'Paylaş'
+                background_color: 0.2, 0.6, 1, 1
+                on_release: root.share()
+
+<ContentPreviewCard>:
+    canvas.before:
+        Color:
+            rgba: 0.95, 0.95, 0.95, 1
+        RoundedRectangle:
+            pos: self.pos
+            size: self.size
+            radius: [dp(8)]
+    
+    BoxLayout:
+        orientation: 'vertical'
+        padding: dp(16)
+        spacing: dp(8)
+        
+        # Thumbnail
+        AsyncImage:
+            source: root.thumbnail
+            size_hint_y: None
+            height: dp(200)
+            
+        # Başlık
+        Label:
+            text: root.title
+            size_hint_y: None
+            height: dp(40)
+            font_size: sp(18)
+            bold: True
+            
+        # Açıklama
+        Label:
+            text: root.description
+            size_hint_y: None
+            height: dp(60)
+            text_size: self.width, None
+            
+        # Kaynak bilgisi
+        Label:
+            text: root.source_info
+            size_hint_y: None
+            height: dp(30)
+            color: 0.5, 0.5, 0.5, 1
+            font_size: sp(14)

@@ -1,0 +1,1002 @@
+#:kivy 2.2.1
+#:import utils kivy.utils
+
+<LoginScreen>:
+    MDBoxLayout:
+        orientation: 'vertical'
+        padding: "20dp"
+        spacing: "20dp"
+        
+        AsyncImage:
+            source: "assets/logo.png"
+            size_hint: None, None
+            size: "150dp", "150dp"
+            pos_hint: {"center_x": .5}
+        
+        MDLabel:
+            text: "DigiCollect"
+            halign: "center"
+            font_style: "H4"
+            theme_text_color: "Primary"
+            size_hint_y: None
+            height: self.texture_size[1]
+        
+        MDLabel:
+            text: "Dijital Koleksiyoncu Sosyal Ağı"
+            halign: "center"
+            theme_text_color: "Secondary"
+            size_hint_y: None
+            height: self.texture_size[1]
+        
+        Widget:
+            size_hint_y: None
+            height: "40dp"
+        
+        MDTextField:
+            id: email
+            hint_text: "Email"
+            icon_right: "email"
+            helper_text_mode: "on_error"
+            size_hint_x: None
+            width: "300dp"
+            pos_hint: {"center_x": .5}
+        
+        MDTextField:
+            id: password
+            hint_text: "Şifre"
+            icon_right: "key-variant"
+            helper_text_mode: "on_error"
+            password: True
+            size_hint_x: None
+            width: "300dp"
+            pos_hint: {"center_x": .5}
+        
+        MDRaisedButton:
+            text: "Giriş Yap"
+            on_release: app.login()
+            size_hint_x: None
+            width: "300dp"
+            pos_hint: {"center_x": .5}
+        
+        MDTextButton:
+            text: "Şifremi Unuttum"
+            theme_text_color: "Custom"
+            text_color: app.theme_cls.primary_color
+            pos_hint: {"center_x": .5}
+            on_release: app.show_reset_password_dialog()
+        
+        Widget:
+            size_hint_y: None
+            height: "20dp"
+        
+        MDLabel:
+            text: "Hesabın yok mu?"
+            halign: "center"
+            theme_text_color: "Secondary"
+            size_hint_y: None
+            height: self.texture_size[1]
+        
+        MDRaisedButton:
+            text: "Kayıt Ol"
+            on_release: app.root.current = 'register'
+            size_hint_x: None
+            width: "300dp"
+            pos_hint: {"center_x": .5}
+
+<RegisterScreen>:
+    MDBoxLayout:
+        orientation: 'vertical'
+        padding: "20dp"
+        spacing: "20dp"
+        
+        AsyncImage:
+            source: "assets/logo.png"
+            size_hint: None, None
+            size: "150dp", "150dp"
+            pos_hint: {"center_x": .5}
+        
+        MDLabel:
+            text: "Kayıt Ol"
+            halign: "center"
+            font_style: "H4"
+            theme_text_color: "Primary"
+            size_hint_y: None
+            height: self.texture_size[1]
+        
+        Widget:
+            size_hint_y: None
+            height: "20dp"
+        
+        MDTextField:
+            id: name
+            hint_text: "Ad Soyad"
+            icon_right: "account"
+            helper_text_mode: "on_error"
+            size_hint_x: None
+            width: "300dp"
+            pos_hint: {"center_x": .5}
+        
+        MDTextField:
+            id: email
+            hint_text: "Email"
+            icon_right: "email"
+            helper_text_mode: "on_error"
+            size_hint_x: None
+            width: "300dp"
+            pos_hint: {"center_x": .5}
+        
+        MDTextField:
+            id: password
+            hint_text: "Şifre"
+            icon_right: "key-variant"
+            helper_text_mode: "on_error"
+            password: True
+            size_hint_x: None
+            width: "300dp"
+            pos_hint: {"center_x": .5}
+        
+        MDTextField:
+            id: password_confirm
+            hint_text: "Şifre Tekrar"
+            icon_right: "key-variant"
+            helper_text_mode: "on_error"
+            password: True
+            size_hint_x: None
+            width: "300dp"
+            pos_hint: {"center_x": .5}
+        
+        MDRaisedButton:
+            text: "Kayıt Ol"
+            on_release: app.register()
+            size_hint_x: None
+            width: "300dp"
+            pos_hint: {"center_x": .5}
+        
+        Widget:
+            size_hint_y: None
+            height: "20dp"
+        
+        MDLabel:
+            text: "Zaten hesabın var mı?"
+            halign: "center"
+            theme_text_color: "Secondary"
+            size_hint_y: None
+            height: self.texture_size[1]
+        
+        MDRaisedButton:
+            text: "Giriş Yap"
+            on_release: app.root.current = 'login'
+            size_hint_x: None
+            width: "300dp"
+            pos_hint: {"center_x": .5}
+
+<HomeScreen>:
+    MDBoxLayout:
+        orientation: 'vertical'
+        
+        MDTopAppBar:
+            title: "DigiCollect"
+            elevation: 2
+            pos_hint: {"top": 1}
+            right_action_items: [["compass", "go_to_discovery"], ["account", "go_to_profile"]]
+            left_action_items: [["menu", "toggle_nav_drawer"]]
+            
+            MDBoxLayout:
+                orientation: 'horizontal'
+                padding: "10dp"
+                spacing: "10dp"
+                pos_hint: {"center_x": .5, "center_y": .5}
+                
+                AsyncImage:
+                    source: "assets/logo.png"
+                    size_hint: None, None
+                    size: "32dp", "32dp"
+                    pos_hint: {"center_y": .5}
+                
+                MDLabel:
+                    text: "DigiCollect"
+                    font_style: "H6"
+                    theme_text_color: "Custom"
+                    text_color: 1, 1, 1, 1
+            
+        MDScrollView:
+            MDList:
+                id: collection_list
+        
+        MDFloatingActionButton:
+            icon: "plus"
+            pos_hint: {'right': 0.95, 'y': 0.05}
+            on_release: app.show_collection_dialog()
+
+<CollectionScreen>:
+    MDBoxLayout:
+        orientation: 'vertical'
+        
+        MDTopAppBar:
+            title: "Koleksiyon"
+            left_action_items: [["arrow-left", lambda x: setattr(app.root, 'current', 'home')]]
+            right_action_items: [["share", lambda x: app.share_collection()], ["heart-outline", lambda x: app.toggle_follow_collection()]]
+            elevation: 2
+            
+        MDBoxLayout:
+            orientation: 'vertical'
+            padding: "20dp"
+            spacing: "20dp"
+            
+            MDLabel:
+                id: collection_name
+                text: ""
+                halign: "left"
+                font_style: "H5"
+            
+            MDLabel:
+                id: collection_description
+                text: ""
+                halign: "left"
+                theme_text_color: "Secondary"
+            
+            MDLabel:
+                id: collection_category
+                text: ""
+                halign: "left"
+                theme_text_color: "Secondary"
+            
+            MDLabel:
+                id: collection_stats
+                text: ""
+                halign: "left"
+                theme_text_color: "Secondary"
+            
+            MDSeparator:
+                height: "1dp"
+            
+            MDLabel:
+                text: "İçerikler"
+                halign: "left"
+                font_style: "H6"
+            
+            RecycleView:
+                id: content_list
+                viewclass: 'CollectionItem'
+                RecycleBoxLayout:
+                    default_size: None, dp(72)
+                    default_size_hint: 1, None
+                    size_hint_y: None
+                    height: self.minimum_height
+                    orientation: 'vertical'
+                    spacing: dp(8)
+
+<ProfileScreen>:
+    BoxLayout:
+        orientation: 'vertical'
+        padding: 20
+        spacing: 10
+
+        BoxLayout:
+            size_hint_y: 0.3
+            spacing: 20
+            padding: 10
+
+            AsyncImage:
+                id: profile_image
+                source: root.profile_picture if root.profile_picture else 'assets/default_profile.png'
+                size_hint_x: None
+                width: self.height
+                allow_stretch: True
+                keep_ratio: True
+                canvas.before:
+                    Color:
+                        rgba: utils.get_color_from_hex('#f0f0f0')
+                    Ellipse:
+                        size: self.size
+                        pos: self.pos
+
+            BoxLayout:
+                orientation: 'vertical'
+                spacing: 5
+                
+                Label:
+                    text: root.username
+                    font_size: '20sp'
+                    halign: 'left'
+                    text_size: self.size
+                    bold: True
+                
+                Label:
+                    text: f'Premium: {root.premium_type}'
+                    halign: 'left'
+                    text_size: self.size
+                
+                Button:
+                    text: 'Profil Fotoğrafı Değiştir'
+                    size_hint_y: None
+                    height: '40dp'
+                    on_release: root.change_profile_picture()
+
+        ScrollView:
+            GridLayout:
+                id: collections_grid
+                cols: 2
+                spacing: 10
+                size_hint_y: None
+                height: self.minimum_height
+
+<CollectionCard>:
+    orientation: 'vertical'
+    padding: 10
+    spacing: 5
+    size_hint_y: None
+    height: '200dp'
+    canvas.before:
+        Color:
+            rgba: utils.get_color_from_hex('#ffffff')
+        RoundedRectangle:
+            size: self.size
+            pos: self.pos
+            radius: [10]
+
+    AsyncImage:
+        source: root.thumbnail if root.thumbnail else 'assets/default_collection.png'
+        size_hint_y: 0.6
+        allow_stretch: True
+        keep_ratio: True
+
+    Label:
+        text: root.name
+        size_hint_y: 0.15
+        bold: True
+
+    Label:
+        text: f'{root.item_count} içerik • {root.followers_count} takipçi'
+        size_hint_y: 0.15
+        color: utils.get_color_from_hex('#666666')
+
+    Button:
+        text: 'Takip Et' if not root.is_following else 'Takip Ediliyor'
+        size_hint_y: 0.1
+        background_color: utils.get_color_from_hex('#2196f3') if not root.is_following else utils.get_color_from_hex('#4caf50')
+        on_release: root.toggle_follow()
+
+<CollectionManagerScreen>:
+    MDBoxLayout:
+        orientation: 'vertical'
+        
+        MDTopAppBar:
+            title: "Koleksiyonlarım"
+            left_action_items: [["arrow-left", lambda x: setattr(app.root, 'current', 'home')]]
+            right_action_items: [["plus", lambda x: app.show_collection_dialog()]]
+            elevation: 2
+        
+        # Koleksiyon listesi
+        MDScrollView:
+            MDList:
+                id: collection_list
+                padding: "10dp"
+                spacing: "10dp"
+
+<CreateCollectionDialog>:
+    title: "Yeni Koleksiyon"
+    type: "custom"
+    
+    MDBoxLayout:
+        orientation: "vertical"
+        spacing: "20dp"
+        padding: "20dp"
+        size_hint_y: None
+        height: "400dp"
+        
+        MDTextField:
+            id: collection_name
+            hint_text: "Koleksiyon Adı"
+            helper_text: "Koleksiyonunuza bir isim verin"
+            helper_text_mode: "on_error"
+        
+        MDTextField:
+            id: collection_description
+            hint_text: "Açıklama"
+            helper_text: "Koleksiyonunuzu tanımlayın"
+            multiline: True
+        
+        MDBoxLayout:
+            orientation: "vertical"
+            spacing: "10dp"
+            size_hint_y: None
+            height: "120dp"
+            
+            MDLabel:
+                text: "Kategori"
+                font_style: "Caption"
+            
+            MDDropDownItem:
+                id: category_dropdown
+                text: "Kategori seçin"
+                on_release: app.show_category_menu(self)
+            
+            MDDropDownItem:
+                id: subcategory_dropdown
+                text: "Alt kategori seçin"
+                disabled: True
+                on_release: app.show_subcategory_menu(self)
+        
+        MDBoxLayout:
+            orientation: "horizontal"
+            spacing: "10dp"
+            size_hint_y: None
+            height: "48dp"
+            
+            MDLabel:
+                text: "Gizlilik"
+                size_hint_x: None
+                width: "100dp"
+            
+            MDSwitch:
+                id: is_public
+                active: True
+                
+        MDBoxLayout:
+            orientation: "horizontal"
+            spacing: "10dp"
+            adaptive_height: True
+            
+            MDFlatButton:
+                text: "İPTAL"
+                on_release: root.dismiss()
+            
+            MDRaisedButton:
+                text: "OLUŞTUR"
+                on_release: app.create_collection(collection_name.text, collection_description.text, category_dropdown.current_item, subcategory_dropdown.current_item if not subcategory_dropdown.disabled else None, is_public.active)
+
+<ContentCollectorScreen>:
+    BoxLayout:
+        orientation: 'vertical'
+        spacing: 10
+        padding: 10
+
+        MDTopAppBar:
+            title: "İçerik Topla"
+            left_action_items: [["arrow-left", lambda x: app.go_back()]]
+
+        BoxLayout:
+            orientation: 'vertical'
+            spacing: 10
+            padding: 10
+
+            MDTextField:
+                id: url_input
+                hint_text: "URL yapıştır"
+                helper_text: "İçerik URL'sini buraya yapıştırın"
+                helper_text_mode: "on_error"
+                icon_right: "link"
+                size_hint_y: None
+                height: "48dp"
+
+            MDRaisedButton:
+                text: "İçeriği Getir"
+                size_hint_x: 1
+                on_release: root.fetch_content()
+
+            ScrollView:
+                BoxLayout:
+                    id: preview_container
+                    orientation: 'vertical'
+                    size_hint_y: None
+                    height: self.minimum_height
+                    spacing: 10
+                    padding: 10
+
+<ContentPreviewCard>:
+    orientation: 'vertical'
+    size_hint_y: None
+    height: "400dp"
+    padding: 10
+    spacing: 5
+
+    MDCard:
+        orientation: 'vertical'
+        padding: 10
+        spacing: 5
+
+        AsyncImage:
+            id: preview_image
+            source: root.thumbnail
+            size_hint_y: 0.6
+            allow_stretch: True
+            keep_ratio: True
+
+        MDLabel:
+            text: root.title
+            bold: True
+            size_hint_y: None
+            height: self.texture_size[1]
+
+        MDLabel:
+            text: root.description
+            size_hint_y: None
+            height: self.texture_size[1]
+
+        BoxLayout:
+            orientation: 'horizontal'
+            size_hint_y: None
+            height: "48dp"
+            spacing: 10
+
+            MDLabel:
+                text: root.content_type
+                size_hint_x: 0.3
+
+            MDRaisedButton:
+                text: "Kes"
+                size_hint_x: 0.7
+                on_release: root.show_cut_dialog()
+
+<ContentCutterScreen>:
+    BoxLayout:
+        orientation: 'vertical'
+        spacing: 10
+        padding: 10
+
+        MDTopAppBar:
+            title: "İçerik Kes"
+            left_action_items: [["arrow-left", lambda x: app.go_back()]]
+
+        BoxLayout:
+            orientation: 'vertical'
+            spacing: 10
+            padding: 10
+
+            # Video/Ses kesme araçları
+            BoxLayout:
+                id: media_cutter
+                orientation: 'vertical'
+                spacing: 5
+                size_hint_y: None
+                height: "200dp"
+                opacity: 1 if root.content_type in ['video', 'audio', 'spotify', 'podcast'] else 0
+
+                MDLabel:
+                    text: "Zaman Aralığı Seç"
+                    bold: True
+
+                BoxLayout:
+                    orientation: 'horizontal'
+                    spacing: 10
+
+                    MDTextField:
+                        id: start_time
+                        hint_text: "Başlangıç (sn)"
+                        input_filter: "float"
+                        size_hint_x: 0.5
+
+                    MDTextField:
+                        id: end_time
+                        hint_text: "Bitiş (sn)"
+                        input_filter: "float"
+                        size_hint_x: 0.5
+
+                MDSlider:
+                    id: time_slider
+                    min: 0
+                    max: root.media_duration
+                    value: 0
+                    step: 1
+
+            # Metin kesme araçları
+            BoxLayout:
+                id: text_cutter
+                orientation: 'vertical'
+                spacing: 5
+                size_hint_y: None
+                height: "150dp"
+                opacity: 1 if root.content_type == 'text' else 0
+
+                MDLabel:
+                    text: "Metin Seç"
+                    bold: True
+
+                ScrollView:
+                    MDTextField:
+                        id: text_content
+                        multiline: True
+                        readonly: True
+                        size_hint_y: None
+                        height: "100dp"
+
+            # Görsel kesme araçları
+            BoxLayout:
+                id: image_cutter
+                orientation: 'vertical'
+                spacing: 5
+                size_hint_y: None
+                height: "300dp"
+                opacity: 1 if root.content_type == 'image' else 0
+
+                MDLabel:
+                    text: "Görsel Kes"
+                    bold: True
+
+                Image:
+                    id: image_preview
+                    source: root.image_url if root.image_url else ''
+                    size_hint_y: None
+                    height: "200dp"
+                    allow_stretch: True
+                    keep_ratio: True
+
+                GridLayout:
+                    cols: 2
+                    spacing: 5
+                    size_hint_y: None
+                    height: "40dp"
+
+                    MDTextField:
+                        id: crop_x
+                        hint_text: "X"
+                        input_filter: "int"
+
+                    MDTextField:
+                        id: crop_y
+                        hint_text: "Y"
+                        input_filter: "int"
+
+                    MDTextField:
+                        id: crop_width
+                        hint_text: "Genişlik"
+                        input_filter: "int"
+
+                    MDTextField:
+                        id: crop_height
+                        hint_text: "Yükseklik"
+                        input_filter: "int"
+
+            MDRaisedButton:
+                text: "Kesiti Kaydet"
+                size_hint_x: 1
+                on_release: root.save_cut()
+
+<CollectionSelectDialog>:
+    title: "Koleksiyon Seç"
+    type: "custom"
+    content_cls: collection_list
+
+    BoxLayout:
+        id: collection_list
+        orientation: 'vertical'
+        spacing: 10
+        size_hint_y: None
+        height: "300dp"
+
+        RecycleView:
+            viewclass: 'CollectionSelectItem'
+            RecycleBoxLayout:
+                default_size: None, dp(56)
+                default_size_hint: 1, None
+                size_hint_y: None
+                height: self.minimum_height
+                orientation: 'vertical'
+
+<CollectionSelectItem>:
+    orientation: 'horizontal'
+    spacing: 10
+    padding: 10
+    size_hint_y: None
+    height: "56dp"
+
+    MDLabel:
+        text: root.name
+        size_hint_x: 0.7
+
+    MDLabel:
+        text: f"{root.item_count}/20"
+        size_hint_x: 0.3
+
+<ContentPreviewScreen>:
+    MDBoxLayout:
+        orientation: 'vertical'
+        
+        MDTopAppBar:
+            title: "İçerik Detayı"
+            left_action_items: [["arrow-left", lambda x: setattr(app.root, 'current', 'collection')]]
+            right_action_items: [["share", lambda x: app.share_content()]]
+            elevation: 2
+        
+        MDScrollView:
+            MDBoxLayout:
+                orientation: 'vertical'
+                padding: "20dp"
+                spacing: "20dp"
+                size_hint_y: None
+                height: self.minimum_height
+                
+                # İçerik önizleme
+                MDCard:
+                    orientation: 'vertical'
+                    size_hint_y: None
+                    height: "300dp"
+                    padding: "10dp"
+                    spacing: "10dp"
+                    
+                    # Video/Ses için player
+                    MDBoxLayout:
+                        id: media_player
+                        size_hint_y: 0.7
+                    
+                    # Metin içeriği
+                    MDLabel:
+                        id: text_content
+                        size_hint_y: 0.3
+                
+                # Kaynak bilgisi
+                MDCard:
+                    orientation: 'vertical'
+                    size_hint_y: None
+                    height: "100dp"
+                    padding: "10dp"
+                    spacing: "5dp"
+                    
+                    MDLabel:
+                        text: "Kaynak"
+                        font_style: "H6"
+                        size_hint_y: 0.3
+                    
+                    MDLabel:
+                        id: source_url
+                        size_hint_y: 0.4
+                    
+                    MDRaisedButton:
+                        text: "Kaynağa Git"
+                        on_release: app.open_source()
+                        size_hint_y: 0.3
+                
+                # Notlar
+                MDCard:
+                    orientation: 'vertical'
+                    size_hint_y: None
+                    height: "150dp"
+                    padding: "10dp"
+                    spacing: "5dp"
+                    
+                    MDLabel:
+                        text: "Notlar"
+                        font_style: "H6"
+                        size_hint_y: 0.2
+                    
+                    MDTextField:
+                        id: notes
+                        multiline: True
+                        size_hint_y: 0.6
+                    
+                    MDRaisedButton:
+                        text: "Notu Kaydet"
+                        on_release: app.save_notes()
+                        size_hint_y: 0.2
+                
+                # Paylaşım seçenekleri
+                MDCard:
+                    orientation: 'vertical'
+                    size_hint_y: None
+                    height: "150dp"
+                    padding: "10dp"
+                    spacing: "10dp"
+                    
+                    MDLabel:
+                        text: "Paylaş"
+                        font_style: "H6"
+                    
+                    MDGridLayout:
+                        cols: 4
+                        spacing: "10dp"
+                        
+                        MDIconButton:
+                            icon: "whatsapp"
+                            on_release: app.share_to("whatsapp")
+                        
+                        MDIconButton:
+                            icon: "twitter"
+                            on_release: app.share_to("twitter")
+                        
+                        MDIconButton:
+                            icon: "facebook"
+                            on_release: app.share_to("facebook")
+                        
+                        MDIconButton:
+                            icon: "content-copy"
+                            on_release: app.copy_link()
+
+<PremiumScreen>:
+    MDBoxLayout:
+        orientation: 'vertical'
+        
+        MDTopAppBar:
+            title: "Premium Planlar"
+            elevation: 2
+            left_action_items: [["arrow-left", "go_back"]]
+        
+        MDScrollView:
+            MDBoxLayout:
+                orientation: 'vertical'
+                spacing: "20dp"
+                padding: "20dp"
+                adaptive_height: True
+                
+                # Ücretsiz Plan
+                MDCard:
+                    orientation: "vertical"
+                    padding: "10dp"
+                    spacing: "10dp"
+                    size_hint_y: None
+                    height: "200dp"
+                    
+                    MDLabel:
+                        text: "Ücretsiz Plan"
+                        font_style: "H6"
+                        halign: "center"
+                    
+                    MDLabel:
+                        text: "• 1 Koleksiyon\\n• Her koleksiyonda 20 içerik\\n• Ücretsiz"
+                        halign: "left"
+                    
+                    MDRaisedButton:
+                        text: "Aktif Plan"
+                        pos_hint: {"center_x": .5}
+                        disabled: True
+                
+                # Başlangıç Planı
+                MDCard:
+                    orientation: "vertical"
+                    padding: "10dp"
+                    spacing: "10dp"
+                    size_hint_y: None
+                    height: "200dp"
+                    
+                    MDLabel:
+                        text: "Başlangıç Planı"
+                        font_style: "H6"
+                        halign: "center"
+                    
+                    MDLabel:
+                        text: "• 2 Koleksiyon\\n• Her koleksiyonda 25 içerik\\n• 50₺/ay veya 500₺/yıl"
+                        halign: "left"
+                    
+                    MDRaisedButton:
+                        text: "Yükselt"
+                        pos_hint: {"center_x": .5}
+                        on_release: app.upgrade_premium('starter')
+                
+                # Standart Plan
+                MDCard:
+                    orientation: "vertical"
+                    padding: "10dp"
+                    spacing: "10dp"
+                    size_hint_y: None
+                    height: "200dp"
+                    
+                    MDLabel:
+                        text: "Standart Plan"
+                        font_style: "H6"
+                        halign: "center"
+                    
+                    MDLabel:
+                        text: "• 3 Koleksiyon\\n• Her koleksiyonda 30 içerik\\n• 100₺/ay veya 1000₺/yıl"
+                        halign: "left"
+                    
+                    MDRaisedButton:
+                        text: "Yükselt"
+                        pos_hint: {"center_x": .5}
+                        on_release: app.upgrade_premium('standard')
+                
+                # Pro Plan
+                MDCard:
+                    orientation: "vertical"
+                    padding: "10dp"
+                    spacing: "10dp"
+                    size_hint_y: None
+                    height: "200dp"
+                    
+                    MDLabel:
+                        text: "Pro Plan"
+                        font_style: "H6"
+                        halign: "center"
+                    
+                    MDLabel:
+                        text: "• 4 Koleksiyon\\n• Her koleksiyonda 35 içerik\\n• 150₺/ay veya 1500₺/yıl"
+                        halign: "left"
+                    
+                    MDRaisedButton:
+                        text: "Yükselt"
+                        pos_hint: {"center_x": .5}
+                        on_release: app.upgrade_premium('pro')
+                
+                # Sınırsız Plan
+                MDCard:
+                    orientation: "vertical"
+                    padding: "10dp"
+                    spacing: "10dp"
+                    size_hint_y: None
+                    height: "200dp"
+                    
+                    MDLabel:
+                        text: "Sınırsız Plan"
+                        font_style: "H6"
+                        halign: "center"
+                    
+                    MDLabel:
+                        text: "• Sınırsız Koleksiyon\\n• Her koleksiyonda 40 içerik\\n• 200₺/ay veya 2000₺/yıl"
+                        halign: "left"
+                    
+                    MDRaisedButton:
+                        text: "Yükselt"
+                        pos_hint: {"center_x": .5}
+                        on_release: app.upgrade_premium('unlimited')
+                
+                MDLabel:
+                    text: "Premium üyelik avantajlarından hemen yararlanmaya başlayın!"
+                    font_style: "Body1"
+                    halign: "center"
+                    size_hint_y: None
+                    height: "48dp"
+
+<DiscoveryScreen>:
+    MDBoxLayout:
+        orientation: 'vertical'
+        
+        MDTopAppBar:
+            title: "Keşfet"
+            elevation: 2
+            left_action_items: [["menu", "go_home"]]
+        
+        MDBoxLayout:
+            orientation: 'vertical'
+            padding: "10dp"
+            spacing: "10dp"
+            
+            # Kategori filtreleme
+            MDBoxLayout:
+                orientation: 'horizontal'
+                size_hint_y: None
+                height: "56dp"
+                spacing: "10dp"
+                
+                MDDropDownItem:
+                    id: category_filter
+                    text: "Tüm Kategoriler"
+                    on_release: app.show_category_filter_menu(self)
+                
+                MDDropDownItem:
+                    id: subcategory_filter
+                    text: "Alt Kategori"
+                    disabled: True
+                    on_release: app.show_subcategory_filter_menu(self)
+            
+            MDScrollView:
+                MDBoxLayout:
+                    orientation: 'vertical'
+                    spacing: "20dp"
+                    padding: "10dp"
+                    adaptive_height: True
+                    
+                    MDLabel:
+                        text: "Trend Koleksiyonlar"
+                        font_style: "H6"
+                        theme_text_color: "Primary"
+                    
+                    MDGridLayout:
+                        cols: 1
+                        spacing: "10dp"
+                        adaptive_height: True
+                        id: trending_collections
+                    
+                    MDLabel:
+                        text: "Popüler İçerikler"
+                        font_style: "H6"
+                        theme_text_color: "Primary"
+                    
+                    MDGridLayout:
+                        cols: 1
+                        spacing: "10dp"
+                        adaptive_height: True
+                        id: popular_content
+        
+        MDFloatingActionButton:
+            icon: "assets/logo.png"
+            pos_hint: {"center_x": .9, "center_y": .1}
+            on_release: app.root.current = 'content_collector'

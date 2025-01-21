@@ -1,0 +1,16 @@
+#:kivy 2.0.0
+
+<FloatingButton>:
+    canvas.before:
+        Color:
+            rgba: 0, 0, 0, 0.2
+        RoundedRectangle:
+            pos: self.pos[0] + dp(2), self.pos[1] - dp(2)
+            size: self.size
+            radius: [self.height/2]
+        Color:
+            rgb: self.background_color
+        RoundedRectangle:
+            pos: self.pos
+            size: self.size
+            radius: [self.height/2]
